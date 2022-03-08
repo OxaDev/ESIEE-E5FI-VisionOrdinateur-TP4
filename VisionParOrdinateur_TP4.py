@@ -69,5 +69,5 @@ list_dir = [
 
 desc = getDescritors(list_dir)
 N_list = []
-for N in [2,4,8,16,32,64,128,256,512,1024,2048,4096]:
+for N in [2,4,8,16,32,64,128,256,512,1024,2048]:
     N_list.append( vocabulaire(N, desc) )
