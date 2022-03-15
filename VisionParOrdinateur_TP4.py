@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import random
 import time
+import glob
 
 def getDescritors(chemins):
     s = cv2.xfeatures2d.SURF_create()
@@ -16,7 +17,7 @@ def getDescritors(chemins):
     for path in chemins:
         onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
         for filename in onlyfiles:
-            img_in = cv2.imread( str(path)+"/"+str(filename) )
+            img_in = cv2.imread( join(str(path),str(filename)) )
 
             (kps, dsc) = s.detectAndCompute(img_in,None)   
             descriptors = np.append(descriptors, dsc)      
@@ -34,40 +35,33 @@ def vocabulaire(N, desc):
     values = k_means.cluster_centers_
     labels = k_means.labels_
     inertia  = k_means.inertia_
+
+    np.savetxt(join('part1_saves','center_'+str(N)+'.txt'), values, delimiter=',')
     
     end = time.time()
     
-    print(" --\tN : " + str(N) + "\t-- inertia :\t" + str(inertia) + "\t -- time :\t" + str(end - start) + "s")
-    return inertia
-
-    # r = lambda: random.randint(0,255)
-    # # Now separate the data, Note the flatten()
-    # for i in range(N):
-    #     tab_classe = desc[labels.ravel()==i]
-    #     color = str('#%02X%02X%02X' % (r(),r(),r()) )
-    #     plt.scatter(tab_classe[:,0],tab_classe[:,1], c=color, s= 1)
-
-    # plt.scatter(values[:,0],values[:,1],s = 4,c = 'y')
-    # plt.xlabel('Height'),plt.ylabel('Weight')
-    # plt.show()
-
-    ## Get Centroids to save to file
-
-    # for i in labels:
-    #     plt.scatter(np.array(xx)[labels == i] , np.array(yy)[labels == i] , label = i, s = 1)
-    # plt.scatter(labels[:,0] , labels[:,1] , s = 40, color = 'k')
-    # plt.legend()
-    # plt.show()
-
+    print(" --\tN : " + str(N) + "\t-- inertia :\t" + str(inertia) + "\t -- time :\t" + str(end - start) + "s" + "\t -- Normalized centers :\t" + str(np.linalg.norm(values)))
+    return inertia, np.linalg.norm(values)
 
 list_dir = [
-    "./101_ObjectCategories/ant",
-    "./101_ObjectCategories/camera",
-    "./101_ObjectCategories/cougar_face",
-    "./101_ObjectCategories/garfield"
+    join("101_ObjectCategories","ant"),
+    join("101_ObjectCategories","camera"),
+    join("101_ObjectCategories","cougar_face"),
+    join("101_ObjectCategories","garfield")
 ]
 
 desc = getDescritors(list_dir)
-N_list = []
-for N in [2,4,8,16,32,64,128,256,512,1024,2048]:
-    N_list.append( vocabulaire(N, desc) )
+variance_list = np.array([])
+error_max_list = np.array([])
+N_list = np.array([2,4,8,16,32,64,128,256,512,1024,2048])
+
+for N in N_list:
+    inertia, linalg = vocabulaire(N, desc)
+    variance_list = np.append(variance_list, inertia)
+    error_max_list = np.append(error_max_list, linalg)
+
+plt.plot(N_list, variance_list )
+plt.show()
+
+plt.plot( N_list, error_max_list)
+plt.show()

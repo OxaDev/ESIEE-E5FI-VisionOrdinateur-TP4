@@ -1,0 +1,12 @@
+.\Python_3.7.5\python .\VisionParOrdinateur_TP4.py
+ --     N : 2   	-- inertia :    26867.296875     	-- time :      0.34150004386901855s     -- Normalized centers :        1.2358369
+ --     N : 4   	-- inertia :    22131.5390625    	-- time :      0.6845006942749023s      -- Normalized centers :        1.7970409
+ --     N : 8   	-- inertia :    18566.029296875  	-- time :      2.4544994831085205s      -- Normalized centers :        2.5931468
+ --     N : 16  	-- inertia :    15897.986328125  	-- time :      4.376000642776489s       -- Normalized centers :        3.703341
+ --     N : 32  	-- inertia :    13990.458984375  	-- time :      11.971999168395996s      -- Normalized centers :        5.2849636
+ --     N : 64  	-- inertia :    12441.9716796875        -- time :      26.38949966430664s       -- Normalized centers :        7.525347
+ --     N : 128 	-- inertia :    11112.1318359375        -- time :      57.514999866485596s      -- Normalized centers :        10.70084
+ --     N : 256 	-- inertia :    9961.435546875   	-- time :      124.12900042533875s      -- Normalized centers :        15.216843
+ --     N : 512 	-- inertia :    8927.55078125    	-- time :      233.03099656105042s      -- Normalized centers :        21.628345
+ --     N : 1024        -- inertia :    7983.1064453125  	-- time :      315.0185306072235s       -- Normalized centers :        30.71758
+ --     N : 2048        -- inertia :    7076.25830078125        -- time :      508.17555689811707s      -- Normalized centers :        43.64152
