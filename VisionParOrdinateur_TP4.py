@@ -97,7 +97,7 @@ list_dir = [
     join("101_ObjectCategories","cougar_face"),
     join("101_ObjectCategories","garfield")
 ]
-mode = "vocabulaire"
+mode = "vectorisation"
 
 ######### Execution #########
 if(mode== "saveKmeans"):
@@ -121,12 +121,11 @@ if(mode== "saveKmeans"):
 if(mode == "vectorisation"):
     im_vectors = np.asarray([])
     im_filename = []
-    Nb_cluster = 1024
+    Nb_cluster = 512
 
     k_means = get_model(Nb_cluster)
 
     for path in list_dir:
-        print("\nFolder : "+path)
         onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
         indic = 1
         for filename in onlyfiles:
@@ -136,11 +135,13 @@ if(mode == "vectorisation"):
             im_vectors = np.append(im_vectors, vector_im[0])
             im_filename.append(im)
             indic +=1
-    
+
     with open(join('part2_saves','base_im_vectors_N_'+str(Nb_cluster)+'.pickle'), 'wb') as f:
         pickle.dump(im_vectors, f)
     with open(join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle'), 'wb') as f:
         pickle.dump(im_filename, f)
+    
+    print("-- Vectorisation file saved --")
 
 if(mode == "vocabulaire"):
     desc = getDescritors(list_dir)
