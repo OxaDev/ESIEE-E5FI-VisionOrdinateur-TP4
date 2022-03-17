@@ -111,7 +111,7 @@ if(mode== "saveKmeans"):
 if(mode == "vectorisation"):
     im_vectors = np.asarray([])
     im_filename = []
-    Nb_cluster = 1024 
+    Nb_cluster = 32
 
     filename = join('part2_saves','kmeans_N_'+str(Nb_cluster)+'.pickle')
     k_means = pickle.load(open(filename, 'rb'))
