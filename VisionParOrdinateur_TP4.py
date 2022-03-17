@@ -32,8 +32,9 @@ def vocabulaire(N, desc):
 
     start = time.time()
 
-    k_means = KMeans(n_clusters=N, init="k-means++", n_init=N)
-    labels_predict = k_means.fit_predict(desc)
+    #k_means = KMeans(n_clusters=N)
+    k_means = get_model(N)
+    labels_predict = k_means.predict(desc)
     values = k_means.cluster_centers_
     labels = k_means.labels_
     inertia = k_means.inertia_
@@ -84,6 +85,11 @@ def vectoriser(pim, kmeans):
 
     return labels_predict
 
+def get_model(n_cluster):
+    filename = join('save_models','kmeans_N_'+str(n_cluster)+'.pickle')
+    k_means = pickle.load(open(filename, 'rb'))
+    return k_means
+
 ####### Variables #######
 list_dir = [
     join("101_ObjectCategories","ant"),
@@ -91,30 +97,33 @@ list_dir = [
     join("101_ObjectCategories","cougar_face"),
     join("101_ObjectCategories","garfield")
 ]
-mode = "vectorisation"
+mode = "vocabulaire"
 
 ######### Execution #########
 if(mode== "saveKmeans"):
-    N_list = np.array([2,4,8,16,32,64,128,256,512,1024])
+    N_list = np.array([2,4,8,16,32,64,128,256,512,1024,2048,4096])
     desc = getDescritors(list_dir)
 
     for N in N_list:    
         print(" -- KMeans for N : " + str(N) + " -- ", end="")
-        k_means = KMeans(n_clusters=N, init="k-means++", n_init=N)
+        start = time.time()
+
+        k_means = KMeans(n_clusters=N)
         k_means.fit(desc)
 
-        filename = join('part2_saves','kmeans_N_'+str(N)+'.pickle')
+        filename = join('save_models','kmeans_N_'+str(N)+'.pickle')
         pickle.dump(k_means, open(filename, 'wb'))
-        print("saved")
+
+        end = time.time()
+        print("saved -- time : " + str(end - start) + "s")
 
 
 if(mode == "vectorisation"):
     im_vectors = np.asarray([])
     im_filename = []
-    Nb_cluster = 32
+    Nb_cluster = 1024
 
-    filename = join('part2_saves','kmeans_N_'+str(Nb_cluster)+'.pickle')
-    k_means = pickle.load(open(filename, 'rb'))
+    k_means = get_model(Nb_cluster)
 
     for path in list_dir:
         print("\nFolder : "+path)
@@ -137,16 +146,27 @@ if(mode == "vocabulaire"):
     desc = getDescritors(list_dir)
     variance_list = np.array([])
     error_max_list = np.array([])
-    N_list = np.array([2,4,8,16,32,64,128,256,512,1024])
+    N_list = np.array([2,4,8,16,32,64,128,256,512,1024,2048,4096])
 
     for N in N_list:
         inertia, linalg = vocabulaire(N, desc)
         variance_list = np.append(variance_list, inertia)
         error_max_list = np.append(error_max_list, linalg)
 
-    plt.plot(N_list, variance_list )
-    plt.show()
+    plt.ion()
+    plt.plot(N_list, variance_list)
+    plt.title("Liste des variances total en fonction de N")
+    plt.xlabel("N")
+    plt.ylabel("Variance")
+    plt.ioff()
+    plt.savefig(join("part1_saves","list_variance_totale.png") )
 
-    plt.plot( N_list, error_max_list)
-    plt.show()
+    plt.cla()  
+
+    plt.plot(N_list, error_max_list)
+    plt.title("Liste des erreurs max en fonction de N")
+    plt.ylabel("Erreur maximum")
+    plt.xlabel("N")
+    plt.ioff()
+    plt.savefig(join("part1_saves","list_error_max.png") )
 
