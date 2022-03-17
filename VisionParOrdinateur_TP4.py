@@ -19,7 +19,7 @@ def getDescritors(chemins):
         onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
         for filename in onlyfiles:
             img_in = cv2.imread( join(str(path),str(filename)) )
-
+            img_in = cv2.cvtColor(img_in,cv2.COLOR_BGR2GRAY)
             (kps, dsc) = s.detectAndCompute(img_in,None)   
             descriptors = np.append(descriptors, dsc)      
 
@@ -27,22 +27,33 @@ def getDescritors(chemins):
     desc = np.float32(desc)
     return desc
 
+
 def vocabulaire(N, desc):
 
     start = time.time()
 
-    k_means = KMeans(n_clusters=N, n_init=4)
-    k_means.fit(desc)
+    k_means = KMeans(n_clusters=N, init="k-means++", n_init=N)
+    labels_predict = k_means.fit_predict(desc)
     values = k_means.cluster_centers_
     labels = k_means.labels_
-    inertia  = k_means.inertia_
+    inertia = k_means.inertia_
 
+    errorMax = 0
+    for i in range(len(labels_predict)):
+        predicted_class = labels_predict[i]
+        current_center = values[predicted_class]
+        current_point = desc[i]
+        
+        temp_max = np.linalg.norm(current_center - current_point)
+        if(temp_max > errorMax):
+            errorMax = temp_max
+    
     np.savetxt(join('part1_saves','center_'+str(N)+'.txt'), values, delimiter=',')
     
     end = time.time()
     
-    print(" --\tN : " + str(N) + "\t-- inertia :\t" + str(inertia) + "\t -- time :\t" + str(end - start) + "s" + "\t -- Normalized centers :\t" + str(np.linalg.norm(values)))
-    return inertia, np.linalg.norm(values)
+    print(" --\tN : " + str(N) + "\t-- inertia :\t" + str(inertia) + "\t -- time :\t" + str(end - start) + "s" + "\t -- Normalized centers :\t" + str(errorMax))
+    return inertia, errorMax
 
 def getVocab(nb_clusters):
     vocab = np.asarray([])
@@ -58,31 +69,20 @@ def getVocab(nb_clusters):
             vocab = np.append(vocab, tab_append)
     return vocab
 
-def vectoriser(pim, pvoca):
+def vectoriser(pim, kmeans):
     s = cv2.xfeatures2d.SURF_create()
     img_in = cv2.imread( pim )
-    (kps, dsc) = s.detectAndCompute(img_in,None)   
-    return_vector = np.asarray([])
-    for i in range(len(pvoca)):
-        return_vector = np.append(return_vector,0)
-    
-    indice_dsc = 0
-    for elem_desc in dsc:
-        #print("Descriptor element "+str(indice_dsc+1)+"/"+str(len(dsc)) + " -- " + str(round((indice_dsc+1)*100/len(dsc), 2 ) )+ "%", end="" )
-        min_dist = 9999999
-        indice_min = 0
-        indice_vocab = 0
-        for elem_vocab in pvoca:
-            dist = np.linalg.norm(elem_desc - elem_vocab)
-            if( dist < min_dist):
-                min_dist = dist
-                indice_min = indice_vocab
-            indice_vocab += 1
+    img_in = cv2.cvtColor(img_in,cv2.COLOR_BGR2GRAY)
+    (kps, dsc) = s.detectAndCompute(img_in,None) 
+    descriptors = np.array([])  
+    descriptors = np.append(descriptors, dsc)      
 
-        return_vector[indice_min] += 1
-        indice_dsc+=1
-        #print(" -- Minimal distance : " + str(min_dist) + " -- indice in vocab : "+ str(indice_min))
-    return return_vector
+    desc = np.reshape(descriptors, (len(descriptors)//64, 64))
+    desc = np.float32(desc)
+
+    labels_predict = kmeans.predict(desc)
+
+    return labels_predict
 
 ####### Variables #######
 list_dir = [
@@ -94,34 +94,50 @@ list_dir = [
 mode = "vectorisation"
 
 ######### Execution #########
+if(mode== "saveKmeans"):
+    N_list = np.array([2,4,8,16,32,64,128,256,512,1024])
+    desc = getDescritors(list_dir)
+
+    for N in N_list:    
+        print(" -- KMeans for N : " + str(N) + " -- ", end="")
+        k_means = KMeans(n_clusters=N, init="k-means++", n_init=N)
+        k_means.fit(desc)
+
+        filename = join('part2_saves','kmeans_N_'+str(N)+'.pickle')
+        pickle.dump(k_means, open(filename, 'wb'))
+        print("saved")
+
+
 if(mode == "vectorisation"):
-    nb_clusters = 512
-    vocab = getVocab(nb_clusters)
     im_vectors = np.asarray([])
     im_filename = []
+    Nb_cluster = 1024 
+
+    filename = join('part2_saves','kmeans_N_'+str(Nb_cluster)+'.pickle')
+    k_means = pickle.load(open(filename, 'rb'))
+
     for path in list_dir:
         print("\nFolder : "+path)
         onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
         indic = 1
         for filename in onlyfiles:
-            print("Filename "+filename+" number \t"+str(indic)+"/"+str(len(onlyfiles)) + " -- " + str(round((indic)*100/len(onlyfiles), 2 ) )+ "%" )
             im = join(str(path),str(filename))
-            vector_im = vectoriser(im, vocab)
+            vector_im = vectoriser(im, k_means)
 
-            im_vectors = np.append(im_vectors, vector_im)
+            im_vectors = np.append(im_vectors, vector_im[0])
             im_filename.append(im)
             indic +=1
     
-    with open(join('part2_saves','base_im_vectors_'+str(nb_clusters)+'.pickle'), 'wb') as f:
+    with open(join('part2_saves','base_im_vectors_N_'+str(Nb_cluster)+'.pickle'), 'wb') as f:
         pickle.dump(im_vectors, f)
-    with open(join('part2_saves','base_im_filenames_'+str(nb_clusters)+'.pickle'), 'wb') as f:
+    with open(join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle'), 'wb') as f:
         pickle.dump(im_filename, f)
 
 if(mode == "vocabulaire"):
     desc = getDescritors(list_dir)
     variance_list = np.array([])
     error_max_list = np.array([])
-    N_list = np.array([2,4,8,16,32,64,128,256,512,1024,2048])
+    N_list = np.array([2,4,8,16,32,64,128,256,512,1024])
 
     for N in N_list:
         inertia, linalg = vocabulaire(N, desc)
