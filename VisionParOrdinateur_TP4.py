@@ -1,3 +1,4 @@
+from calendar import c
 import cv2
 from dml import kda
 from os import listdir, system, name
@@ -95,7 +96,6 @@ def read_X_Y(p_classes, p_filenames, p_vectors, pNb_cluster):
     vect_Y = []
     filenames_filtered = []
 
-    print(" -- Lecture des données -- ")
     for i in range(len(p_vectors)):
         current_vector = p_vectors[i]
         current_filename = p_filenames[i]
@@ -114,13 +114,60 @@ def read_X_Y(p_classes, p_filenames, p_vectors, pNb_cluster):
 
                 mat_X.append(vect_temp)
                 break
-    print(" -- Fin de la lecture -- ")
+    return mat_X, vect_Y, filenames_filtered
+
+def read_X_Y_C(p_classes, p_filenames, p_vectors, pNb_cluster):
+    mat_X = []
+    vect_Y = []
+    filenames_filtered = []
+
+    for i in range(len(p_vectors)):
+        current_vector = p_vectors[i]
+        current_filename = p_filenames[i]
+
+        for i_class in range(len(p_classes)):
+            name_class = p_classes[i_class]
+            if(name_class in current_filename):
+                filenames_filtered.append(current_filename)
+                vect_Y.append(int(i_class/2)+1)
+                vect_temp = []
+                for i_cluster in range(pNb_cluster):
+                    vect_temp.append(0)
+                
+                for elem in current_vector:
+                    vect_temp[elem] += 1
+
+                mat_X.append(vect_temp)
+                break
+    return mat_X, vect_Y, filenames_filtered
+
+def read_X_Y_AB(p_classes, p_filenames, p_vectors, pNb_cluster):
+    mat_X = []
+    vect_Y = []
+    filenames_filtered = []
+
+    for i in range(len(p_vectors)):
+        current_vector = p_vectors[i]
+        current_filename = p_filenames[i]
+
+        for i_class in range(len(p_classes)):
+            name_class = p_classes[i_class]
+            if(name_class in current_filename or i_class == len(p_vectors)-1 ):
+                filenames_filtered.append(current_filename)
+                vect_Y.append(i_class+1)
+                vect_temp = []
+                for i_cluster in range(pNb_cluster):
+                    vect_temp.append(0)
+                
+                for elem in current_vector:
+                    vect_temp[elem] += 1
+
+                mat_X.append(vect_temp)
+                break
     return mat_X, vect_Y, filenames_filtered
 
 def svc_application(X_train, Y_train):
-
-    print(" -- Création du model SVC et Fit des données sur les 2 répertoires -- ")
-    svc_model = svm.SVC()
+    svc_model = svm.SVC(kernel='poly',degree=8)
     svc_model.fit(X_train,Y_train)
 
     return svc_model
@@ -137,6 +184,7 @@ mode = "vocabulaire"
 mode = "vectorisation"
 mode = "Appr_Et_Test_KDA"
 mode = "Appr_Et_Test_SVC"
+mode = "Appr_Et_Test_SVC_4Classes"
 
 Nb_cluster = 512
 
@@ -324,3 +372,83 @@ if(mode == "Appr_Et_Test_SVC"):
     Résultats assez embêtants, 2 erreurs reportées avec la prédiction du modèle SVC 
     '''
         
+if(mode == "Appr_Et_Test_SVC_4Classes"):
+    classes = ['camera','garfield','ant','cougar_face'] # On définit les 4 classes
+    classificateur_doc = {
+        "B" : [],
+        "C" : []
+    }
+
+    for i in range(len(classes)):
+        if i <= 1:
+            classificateur_doc["B"].append(classes[i])
+        else:
+            classificateur_doc["C"].append(classes[i])
+    
+
+    filename_filenames = join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle')
+    filenames = pickle.load(open(filename_filenames, 'rb'))
+    filename_vectors = join('part2_saves','base_im_vectors_N_'+str(Nb_cluster)+'.pickle')
+    vectors = pickle.load(open(filename_vectors, 'rb'))
+
+    x_train, y_train, y_filename = read_X_Y_C(classes, filenames, vectors, Nb_cluster)
+
+    ## Désormais il n'y a que deux classes dans le y_train , 1 ou 2, 1 signifie que le cassificateur B, et 2 le classificateur C
+
+    svc_model = svc_application(x_train, y_train) ## On récupère le modèle SVC de nos répertoire d'apprentissage
+
+    ## Vectorisation des images de test et utilisation de ces dernières avec notre modèle SVC
+    im_vectors = []
+    im_filename = []
+
+    k_means = get_model(Nb_cluster)
+
+    for path in list_dir:
+        path = join(path,"test")
+        onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+        indic = 1
+        for filename in onlyfiles:
+            im = join(str(path),str(filename))
+            vector_im = vectoriser(im, k_means)
+
+            im_vectors.append(vector_im)
+            im_filename.append(im)
+            indic +=1
+
+    X_test, Y_test, Y_filename = read_X_Y(classes, im_filename, im_vectors, Nb_cluster)
+    X_predict = svc_model.predict(X_test) # Prédiction des images de test sur le modèle des images sur 2 répertoires
+
+    nb_success, nb_error = 0, 0
+    for i in range(len(X_predict)):
+        current_classe = X_predict[i]
+        current_filename = Y_filename[i]
+        # Nous récupérons la classe qui a été prédite, grâce à elle nous savons si nous devons refaire une prédiction via le classificateur B ou le classificateur C
+        current_classificateur = "B"
+        if(current_classe == 2):
+            current_classificateur = "C"
+        
+        temp_class = classificateur_doc[current_classificateur] # Avec notre dictionnaire des classificateurs, nous récupérons les deux classes donc l'image a été associée
+
+        # Nous recréons un modèle SVC qui s'adapte à ces deux classes précisement
+        x_train, y_train, y_filename = read_X_Y(temp_class, filenames, vectors, Nb_cluster)
+        svc_model = svc_application(x_train, y_train)
+
+        # Nous récupérons les descripteurs de l'image courante pour les vectoriser et les passer ensuite dans un prédict via le modèle du classificateur courant
+        vector_temp_im = vectoriser(im, k_means)
+        x_test_temp, y_test_temp, y_test_filename = read_X_Y_AB(temp_class, [current_filename], [vector_temp_im], Nb_cluster)
+        x_temp_predict = svc_model.predict(x_test_temp)[0]
+        
+        if(classes[x_temp_predict-1] in current_filename):
+            nb_success += 1
+            print("-- Succès -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
+        else:
+            nb_error += 1
+            print("-- Echec -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
+        print
+
+    print( "-- Résultat de la prédiction -- Nombre de succès : " + str(nb_success) + " -- Nombre d'échecs : " + str(nb_error))
+
+    '''
+    Résultats médiocres, 10 erreurs reportées avec la prédiction du modèle SVC
+    La prédiction sur plusieurs images semblerait plus efficace 
+    '''
