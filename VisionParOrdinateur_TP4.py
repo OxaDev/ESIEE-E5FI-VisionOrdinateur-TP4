@@ -90,22 +90,23 @@ def get_model(n_cluster):
     k_means = pickle.load(open(filename, 'rb'))
     return k_means
 
-def svc_application(classes, filenames, vectors):
+def read_X_Y(p_classes, p_filenames, p_vectors, pNb_cluster):
     mat_X = []
     vect_Y = []
     filenames_filtered = []
-    print(" -- Lecture des données -- ")
-    for i in range(len(vectors)):
-        current_vector = vectors[i]
-        current_filename = filenames[i]
 
-        for i_class in range(len(classes)):
-            name_class = classes[i_class]
+    print(" -- Lecture des données -- ")
+    for i in range(len(p_vectors)):
+        current_vector = p_vectors[i]
+        current_filename = p_filenames[i]
+
+        for i_class in range(len(p_classes)):
+            name_class = p_classes[i_class]
             if(name_class in current_filename):
                 filenames_filtered.append(current_filename)
                 vect_Y.append(i_class+1)
                 vect_temp = []
-                for i_cluster in range(Nb_cluster):
+                for i_cluster in range(pNb_cluster):
                     vect_temp.append(0)
                 
                 for elem in current_vector:
@@ -114,27 +115,15 @@ def svc_application(classes, filenames, vectors):
                 mat_X.append(vect_temp)
                 break
     print(" -- Fin de la lecture -- ")
+    return mat_X, vect_Y, filenames_filtered
+
+def svc_application(X_train, Y_train):
 
     print(" -- Création du model SVC et Fit des données sur les 2 répertoires -- ")
     svc_model = svm.SVC()
-    svc_model.fit(mat_X,vect_Y)
+    svc_model.fit(X_train,Y_train)
 
-    print(" -- Predict des données avec le SVC -- ")
-    predic_svc=  svc_model.predict(mat_X)
-    print(" -- Predict du SVC : " + str(predic_svc) + " -- ")
-
-    nb_error = 0
-    nb_success = 0
-    for i in range(len(predic_svc)):
-        current_predict = predic_svc[i]
-        current_filename = filenames_filtered[i]
-        current_predicted_name = classes[current_predict-1]
-        #print("-- For filename : " + str(current_filename)+ " -- predicted : " + str(current_predicted_name))
-        if(current_predicted_name in current_filename):
-            nb_success +=1
-        else:
-            nb_error += 1
-    print(" -- Nombre de succès de prédictions : " + str(nb_success) + " -- Nombre d'erreur : " + str(nb_error))     
+    return svc_model
 
 ####### Variables #######
 list_dir = [
@@ -147,8 +136,7 @@ mode = "saveKmeans"
 mode = "vocabulaire"
 mode = "vectorisation"
 mode = "Appr_Et_Test_KDA"
-mode = "Appr_Et_Test_SVC_2"
-mode = "Appr_Et_Test_SVC_4"
+mode = "Appr_Et_Test_SVC"
 
 Nb_cluster = 512
 
@@ -286,22 +274,18 @@ if(mode == "Appr_Et_Test_KDA"):
     car on remarquer que certaines valeurs sont positives et d'autres négatives avec un nombre élevé.
     '''
     
-if(mode == "Appr_Et_Test_SVC_2"):
-    classes = ['cougar_face','garfield']
+if(mode == "Appr_Et_Test_SVC"):
+    classes = ['camera','ant']
     filename_filenames = join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle')
     filenames = pickle.load(open(filename_filenames, 'rb'))
 
     filename_vectors = join('part2_saves','base_im_vectors_N_'+str(Nb_cluster)+'.pickle')
     vectors = pickle.load(open(filename_vectors, 'rb'))
 
-    svc_application(classes, filenames, vectors)
-    '''
-    Résultats plutôt corrects, 1 seule erreur reportée avec la prédiction du modèle SVC 
-    '''
+    x_train, y_train, y_filename = read_X_Y(classes, filenames, vectors, Nb_cluster)
+    svc_model = svc_application(x_train, y_train) ## On récupère le modèle SVC de nos répertoire d'apprentissage
 
-if(mode == "Appr_Et_Test_SVC_4"):
-
-    ## Vectorisation des images de test et utilisation de ces dernières avec notre modèle KMeans, et notre modèle SVC
+    ## Vectorisation des images de test et utilisation de ces dernières avec notre modèle SVC
     im_vectors = []
     im_filename = []
 
@@ -319,9 +303,24 @@ if(mode == "Appr_Et_Test_SVC_4"):
             im_filename.append(im)
             indic +=1
 
-    classes = ['cougar_face','garfield','ant','camera']
-    svc_application(classes, im_filename, im_vectors)
+    #classes = ['cougar_face','garfield']
+    X_test, Y_test, Y_filename = read_X_Y(classes, im_filename, im_vectors, Nb_cluster)
+    X_predict = svc_model.predict(X_test) # Prédiction des images de test sur le modèle des images sur 2 répertoires
+
+    nb_success, nb_error = 0, 0
+    for i in range(len(X_predict)):
+        current_classe = classes[X_predict[i]-1]
+        current_filename = Y_filename[i]
+        if(current_classe in current_filename):
+            nb_success += 1
+            print("-- Succès -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(current_classe))
+        else:
+            nb_error += 1
+            print("-- Echec -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(current_classe))
+        print
+
+    print( "-- Résultat de la prédiction -- Nombre de succès : " + str(nb_success) + " -- Nombre d'échecs : " + str(nb_error))
     '''
-    Résultats plutôt corrects, 1 erreur reportée avec la prédiction du modèle SVC 
+    Résultats assez embêtants, 2 erreurs reportées avec la prédiction du modèle SVC 
     '''
         
