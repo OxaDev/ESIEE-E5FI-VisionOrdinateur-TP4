@@ -90,15 +90,10 @@ def get_model(n_cluster):
     k_means = pickle.load(open(filename, 'rb'))
     return k_means
 
-def svc_application(classes):
-    filename_filenames = join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle')
-    filenames = pickle.load(open(filename_filenames, 'rb'))
-    filenames_filtered = []
-    filename_vectors = join('part2_saves','base_im_vectors_N_'+str(Nb_cluster)+'.pickle')
-    vectors = pickle.load(open(filename_vectors, 'rb'))
-
+def svc_application(classes, filenames, vectors):
     mat_X = []
     vect_Y = []
+    filenames_filtered = []
     print(" -- Lecture des données -- ")
     for i in range(len(vectors)):
         current_vector = vectors[i]
@@ -153,7 +148,7 @@ mode = "vocabulaire"
 mode = "vectorisation"
 mode = "Appr_Et_Test_KDA"
 mode = "Appr_Et_Test_SVC_2"
-#mode = "Appr_Et_Test_SVC_4"
+mode = "Appr_Et_Test_SVC_4"
 
 Nb_cluster = 512
 
@@ -293,16 +288,40 @@ if(mode == "Appr_Et_Test_KDA"):
     
 if(mode == "Appr_Et_Test_SVC_2"):
     classes = ['cougar_face','garfield']
-    svc_application(classes)
+    filename_filenames = join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle')
+    filenames = pickle.load(open(filename_filenames, 'rb'))
+
+    filename_vectors = join('part2_saves','base_im_vectors_N_'+str(Nb_cluster)+'.pickle')
+    vectors = pickle.load(open(filename_vectors, 'rb'))
+
+    svc_application(classes, filenames, vectors)
     '''
     Résultats plutôt corrects, 1 seule erreur reportée avec la prédiction du modèle SVC 
     '''
 
 if(mode == "Appr_Et_Test_SVC_4"):
 
+    ## Vectorisation des images de test et utilisation de ces dernières avec notre modèle KMeans, et notre modèle SVC
+    im_vectors = []
+    im_filename = []
+
+    k_means = get_model(Nb_cluster)
+
+    for path in list_dir:
+        path = join(path,"test")
+        onlyfiles = [f for f in listdir(path) if isfile(join(path, f))]
+        indic = 1
+        for filename in onlyfiles:
+            im = join(str(path),str(filename))
+            vector_im = vectoriser(im, k_means)
+
+            im_vectors.append(vector_im)
+            im_filename.append(im)
+            indic +=1
+
     classes = ['cougar_face','garfield','ant','camera']
-    svc_application(classes)
+    svc_application(classes, im_filename, im_vectors)
     '''
-    Résultats plutôt corrects, 2 erreurs reportées avec la prédiction du modèle SVC 
+    Résultats plutôt corrects, 1 erreur reportée avec la prédiction du modèle SVC 
     '''
         
