@@ -179,6 +179,7 @@ list_dir = [
     join("101_ObjectCategories","cougar_face"),
     join("101_ObjectCategories","garfield")
 ]
+
 mode = "saveKmeans"
 mode = "vocabulaire"
 mode = "vectorisation"

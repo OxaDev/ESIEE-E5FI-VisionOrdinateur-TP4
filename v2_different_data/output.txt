@@ -1,0 +1,18 @@
+ -- Apprentissage sur 4 classes --
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0011.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0012.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0019.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0020.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\euphonium\test\image_0005.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\euphonium\test\image_0013.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\euphonium\test\image_0020.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\euphonium\test\image_0038.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0004.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0029.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0045.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0048.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\pagoda\test\image_0002.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\pagoda\test\image_0006.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\pagoda\test\image_0014.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\pagoda\test\image_0028.jpg -- Prédiction : Faces_easy
+-- Résultat de la prédiction -- Nombre de succès : 4 -- Nombre d'échecs : 12
