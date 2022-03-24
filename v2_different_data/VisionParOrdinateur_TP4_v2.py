@@ -206,6 +206,9 @@ if(mode == "all"):
         
         save_path = join("big_db", base_save_file)
         mkdir(save_path, 0o666)
+        for dirname in ["save_models", "part1_saves", "part2_saves"]:
+            mkdir(join(save_path,dirname), 0o666)
+
 
         print("\n\n Itération : "+str(iter_tests)+" -- Classes -- " + str(classes))
         print("-- Calcul des N --")
