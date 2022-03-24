@@ -188,11 +188,11 @@ mode = "Appr_Et_Test_SVC_4Classes"
 
 mode = "all"
 
-Nb_cluster = 512
+Nb_cluster = 2048
 
 ######### Execution #########
 if(mode == "all"):
-    print("\n\n -- Calcul des N --")
+    """print("\n\n -- Calcul des N --")
     N_list = np.array([2,4,8,16,32,64,128,256,512,1024,2048,4096])
     desc = getDescritors(list_dir)
 
@@ -207,7 +207,7 @@ if(mode == "all"):
         pickle.dump(k_means, open(filename, 'wb'))
 
         end = time.time()
-        print("saved -- time : " + str(end - start) + "s")
+        print("saved -- time : " + str(end - start) + "s")"""
 
     print("\n\n -- Vocabulaire --")
 
@@ -321,7 +321,7 @@ if(mode == "all"):
         s.fit(mat_X,vect_Y)
         temp_value = s.transform(mat_X)
         values_transform.append(temp_value)
-        print(str("\nDegré polynome : " + str(poly) + " -- Valeurs transform : " + str(temp_value)))
+        #print(str("\nDegré polynome : " + str(poly) + " -- Valeurs transform : " + str(temp_value)))
     print(" -- Fin du KDA -- ")
     '''
     Les projections semblent montrer une bonne séparation des classes lorsque le polynome est élevé ( > à 7 ) 
