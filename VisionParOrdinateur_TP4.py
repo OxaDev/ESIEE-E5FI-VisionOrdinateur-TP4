@@ -164,7 +164,7 @@ def read_X_Y_AB(p_classes, p_filenames, p_vectors, pNb_cluster):
     return vect_temp, indic_class, p_filenames[0]
 
 def svc_application(X_train, Y_train):
-    svc_model = svm.SVC(kernel="poly", degree=2)
+    svc_model = svm.SVC(kernel="poly", degree=1)
     svc_model.fit(X_train,Y_train)
 
     return svc_model
@@ -192,7 +192,6 @@ mode = "vectorisation"
 mode = "Appr_Et_Test_KDA"
 mode = "Appr_Et_Test_SVC"
 mode = "Appr_Et_Test_SVC_4Classes"
-
 
 Nb_cluster = 4096
 
@@ -326,12 +325,12 @@ if(mode == "Appr_Et_Test_KDA"):
         print(str("\nDegré polynome : " + str(poly) + " -- Valeurs transform : " + str(temp_value)))
     print(" -- Fin du KDA -- ")
     '''
-    Les projections semblent montrer une bonne séparation des classes lorsque le polynome est élevé ( > à 7 ) 
+    Les projections semblent montrer une bonne séparation des classes lorsque le polynome est élevé ( > à 5 ) 
     car on remarquer que certaines valeurs sont positives et d'autres négatives avec un nombre élevé.
     '''
     
 if(mode == "Appr_Et_Test_SVC"):
-    classes = ['camera','ant']
+    classes = ['cougar_face','garfield']
     filename_filenames = join('part2_saves','base_im_filenames_N_'+str(Nb_cluster)+'.pickle')
     filenames = pickle.load(open(filename_filenames, 'rb'))
 
@@ -359,7 +358,6 @@ if(mode == "Appr_Et_Test_SVC"):
             im_filename.append(im)
             indic +=1
 
-    #classes = ['cougar_face','garfield']
     X_test, Y_test, Y_filename = read_X_Y(classes, im_filename, im_vectors, Nb_cluster)
     X_predict = svc_model.predict(X_test) # Prédiction des images de test sur le modèle des images sur 2 répertoires
 
@@ -376,9 +374,6 @@ if(mode == "Appr_Et_Test_SVC"):
         print
 
     print( "-- Résultat de la prédiction -- Nombre de succès : " + str(nb_success) + " -- Nombre d'échecs : " + str(nb_error))
-    '''
-    Résultats assez embêtants, 2 erreurs reportées avec la prédiction du modèle SVC 
-    '''
         
 if(mode == "Appr_Et_Test_SVC_4Classes"):
     classes = ['cougar_face','camera','garfield','ant'] # On définit les 4 classes
@@ -462,8 +457,3 @@ if(mode == "Appr_Et_Test_SVC_4Classes"):
         print
 
     print( "-- Résultat de la prédiction -- Nombre de succès : " + str(nb_success) + " -- Nombre d'échecs : " + str(nb_error))
-
-    '''
-    Résultats médiocres, 10 erreurs reportées avec la prédiction du modèle SVC
-    La prédiction sur plusieurs images semblerait plus efficace 
-    '''
