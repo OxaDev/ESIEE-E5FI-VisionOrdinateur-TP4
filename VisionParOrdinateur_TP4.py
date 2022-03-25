@@ -142,36 +142,42 @@ def read_X_Y_C(p_classes, p_filenames, p_vectors, pNb_cluster):
     return mat_X, vect_Y, filenames_filtered
 
 def read_X_Y_AB(p_classes, p_filenames, p_vectors, pNb_cluster):
-    mat_X = []
     vect_Y = []
     filenames_filtered = []
 
-    for i in range(len(p_vectors)):
-        current_vector = p_vectors[i]
-        current_filename = p_filenames[i]
+    indic_class = 0 
+    for i_class in range(len(p_classes)):
+        name_class = p_classes[i_class]
+        if(name_class in current_filename ):
+            indic_class = i_class+1
+        
+    filenames_filtered.append(current_filename)
 
-        for i_class in range(len(p_classes)):
-            name_class = p_classes[i_class]
-            if(name_class in current_filename or i_class == len(p_vectors)-1 ):
-                filenames_filtered.append(current_filename)
-                vect_Y.append(i_class+1)
-                vect_temp = []
-                for i_cluster in range(pNb_cluster):
-                    vect_temp.append(0)
-                
-                for elem in current_vector:
-                    vect_temp[elem] += 1
+    vect_temp = []
+    for i_cluster in range(pNb_cluster):
+        vect_temp.append(0)
+    
+    for elem in p_vectors:
+        vect_temp[elem] += 1
 
-                mat_X.append(vect_temp)
-                break
-    return mat_X, vect_Y, filenames_filtered
+
+    return vect_temp, indic_class, p_filenames[0]
 
 def svc_application(X_train, Y_train):
-    svc_model = svm.SVC(kernel='poly',degree=8)
+    svc_model = svm.SVC(kernel="poly", degree=2)
     svc_model.fit(X_train,Y_train)
 
     return svc_model
 
+def svc_application_large(X_train, Y_train):
+    svc_model = svm.SVC(kernel="poly", degree=1)
+    svc_model.fit(X_train,Y_train)
+    return svc_model
+
+def svc_application_precise(X_train, Y_train):
+    svc_model = svm.SVC(kernel="poly", degree=6)
+    svc_model.fit(X_train,Y_train)
+    return svc_model
 ####### Variables #######
 list_dir = [
     join("101_ObjectCategories","ant"),
@@ -187,7 +193,8 @@ mode = "Appr_Et_Test_KDA"
 mode = "Appr_Et_Test_SVC"
 mode = "Appr_Et_Test_SVC_4Classes"
 
-Nb_cluster = 512
+
+Nb_cluster = 4096
 
 ######### Execution #########
 if(mode== "saveKmeans"):
@@ -374,7 +381,7 @@ if(mode == "Appr_Et_Test_SVC"):
     '''
         
 if(mode == "Appr_Et_Test_SVC_4Classes"):
-    classes = ['camera','garfield','ant','cougar_face'] # On définit les 4 classes
+    classes = ['cougar_face','camera','garfield','ant'] # On définit les 4 classes
     classificateur_doc = {
         "B" : [],
         "C" : []
@@ -393,10 +400,12 @@ if(mode == "Appr_Et_Test_SVC_4Classes"):
     vectors = pickle.load(open(filename_vectors, 'rb'))
 
     x_train, y_train, y_filename = read_X_Y_C(classes, filenames, vectors, Nb_cluster)
+    """for i in range(len(y_train)):
+        print("-- classe : "+ str(y_train[i]) + " -- filename : " + str(y_filename[i]))"""
 
     ## Désormais il n'y a que deux classes dans le y_train , 1 ou 2, 1 signifie que le cassificateur B, et 2 le classificateur C
 
-    svc_model = svc_application(x_train, y_train) ## On récupère le modèle SVC de nos répertoire d'apprentissage
+    svc_model = svc_application_large(x_train, y_train) ## On récupère le modèle SVC de nos répertoire d'apprentissage
 
     ## Vectorisation des images de test et utilisation de ces dernières avec notre modèle SVC
     im_vectors = []
@@ -418,6 +427,8 @@ if(mode == "Appr_Et_Test_SVC_4Classes"):
 
     X_test, Y_test, Y_filename = read_X_Y(classes, im_filename, im_vectors, Nb_cluster)
     X_predict = svc_model.predict(X_test) # Prédiction des images de test sur le modèle des images sur 2 répertoires
+    """for i in range(len(Y_test)):
+        print("-- classe : "+ str(Y_test[i]) + " -- filename : " + str(Y_filename[i]) + " -- X predict : " + str(X_predict[i]) )"""
 
     nb_success, nb_error = 0, 0
     for i in range(len(X_predict)):
@@ -432,19 +443,22 @@ if(mode == "Appr_Et_Test_SVC_4Classes"):
 
         # Nous recréons un modèle SVC qui s'adapte à ces deux classes précisement
         x_train, y_train, y_filename = read_X_Y(temp_class, filenames, vectors, Nb_cluster)
-        svc_model = svc_application(x_train, y_train)
+        """for i in range(len(y_train)):
+            print("-- classe : "+ str(y_train[i]) + " -- filename : " + str(y_filename[i]))
+        print("\n\n")"""
+        svc_model_temp = svc_application_precise(x_train, y_train)
 
         # Nous récupérons les descripteurs de l'image courante pour les vectoriser et les passer ensuite dans un prédict via le modèle du classificateur courant
         vector_temp_im = vectoriser(im, k_means)
-        x_test_temp, y_test_temp, y_test_filename = read_X_Y_AB(temp_class, [current_filename], [vector_temp_im], Nb_cluster)
-        x_temp_predict = svc_model.predict(x_test_temp)[0]
-        
-        if(classes[x_temp_predict-1] in current_filename):
+        x_test_temp, y_test_temp, y_test_filename = read_X_Y_AB(temp_class, current_filename, vector_temp_im, Nb_cluster)
+        x_temp_predict = svc_model_temp.predict([x_test_temp])[0]
+        print("filename : " +current_filename+ " -- x predict : "+  str(x_temp_predict) + " -- y : " + str(y_test_temp))
+        if(temp_class[x_temp_predict-1] in current_filename):
             nb_success += 1
-            print("-- Succès -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
+            #print("-- Succès -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
         else:
             nb_error += 1
-            print("-- Echec -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
+            #print("-- Echec -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
         print
 
     print( "-- Résultat de la prédiction -- Nombre de succès : " + str(nb_success) + " -- Nombre d'échecs : " + str(nb_error))

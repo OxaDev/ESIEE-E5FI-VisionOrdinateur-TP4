@@ -1,0 +1,8 @@
+-- Succès -- Nom fichier : 101_ObjectCategories\brain\test\image_0011.jpg -- Prédiction : brain
+-- Succès -- Nom fichier : 101_ObjectCategories\brain\test\image_0012.jpg -- Prédiction : brain
+-- Succès -- Nom fichier : 101_ObjectCategories\brain\test\image_0013.jpg -- Prédiction : brain
+-- Succès -- Nom fichier : 101_ObjectCategories\brain\test\image_0014.jpg -- Prédiction : brain
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0019.jpg -- Prédiction : brain
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0020.jpg -- Prédiction : brain
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0021.jpg -- Prédiction : brain
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0022.jpg -- Prédiction : brain

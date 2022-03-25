@@ -1,0 +1,8 @@
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0005.jpg -- Prédiction : scorpion
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0017.jpg -- Prédiction : scorpion
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0018.jpg -- Prédiction : scorpion
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0035.jpg -- Prédiction : scorpion
+-- Succès -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0019.jpg -- Prédiction : scorpion
+-- Succès -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0020.jpg -- Prédiction : scorpion
+-- Succès -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0021.jpg -- Prédiction : scorpion
+-- Succès -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0022.jpg -- Prédiction : scorpion

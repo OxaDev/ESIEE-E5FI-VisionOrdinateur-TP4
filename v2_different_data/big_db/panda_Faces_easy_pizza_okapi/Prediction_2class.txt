@@ -1,0 +1,8 @@
+-- Succès -- Nom fichier : 101_ObjectCategories\panda\test\image_0019.jpg -- Prédiction : panda
+-- Echec -- Nom fichier : 101_ObjectCategories\panda\test\image_0020.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\panda\test\image_0021.jpg -- Prédiction : panda
+-- Echec -- Nom fichier : 101_ObjectCategories\panda\test\image_0022.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0004.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0029.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0045.jpg -- Prédiction : Faces_easy
+-- Succès -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0048.jpg -- Prédiction : Faces_easy

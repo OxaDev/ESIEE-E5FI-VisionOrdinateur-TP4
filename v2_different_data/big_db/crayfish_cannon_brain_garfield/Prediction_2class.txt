@@ -1,0 +1,8 @@
+-- Succès -- Nom fichier : 101_ObjectCategories\crayfish\test\image_0019.jpg -- Prédiction : crayfish
+-- Succès -- Nom fichier : 101_ObjectCategories\crayfish\test\image_0020.jpg -- Prédiction : crayfish
+-- Succès -- Nom fichier : 101_ObjectCategories\crayfish\test\image_0021.jpg -- Prédiction : crayfish
+-- Succès -- Nom fichier : 101_ObjectCategories\crayfish\test\image_0022.jpg -- Prédiction : crayfish
+-- Echec -- Nom fichier : 101_ObjectCategories\cannon\test\image_0019.jpg -- Prédiction : crayfish
+-- Echec -- Nom fichier : 101_ObjectCategories\cannon\test\image_0020.jpg -- Prédiction : crayfish
+-- Echec -- Nom fichier : 101_ObjectCategories\cannon\test\image_0021.jpg -- Prédiction : crayfish
+-- Echec -- Nom fichier : 101_ObjectCategories\cannon\test\image_0022.jpg -- Prédiction : crayfish

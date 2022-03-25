@@ -1,0 +1,8 @@
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0011.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0012.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0019.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0020.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0019.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0020.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0021.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\pizza\test\image_0022.jpg -- Prédiction : crab

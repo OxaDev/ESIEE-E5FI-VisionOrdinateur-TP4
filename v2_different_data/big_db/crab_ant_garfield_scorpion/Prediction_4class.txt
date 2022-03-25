@@ -1,0 +1,16 @@
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0011.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0012.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0019.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\crab\test\image_0020.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\ant\test\image_0002.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\ant\test\image_0023.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\ant\test\image_0030.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\ant\test\image_0036.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0005.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0017.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0018.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\garfield\test\image_0035.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0019.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0020.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0021.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0022.jpg -- Prédiction : crab

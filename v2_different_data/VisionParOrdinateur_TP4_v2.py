@@ -54,7 +54,7 @@ def vocabulaire(N, desc,save_path):
         if(temp_max > errorMax):
             errorMax = temp_max
     
-    np.savetxt(join('part1_saves','center_'+str(N)+'.txt'), values, delimiter=',')
+    np.savetxt(join(save_path,join('part1_saves','center_'+str(N)+'.txt')), values, delimiter=',')
     
     end = time.time()
     
@@ -287,7 +287,6 @@ if(mode == "all"):
 
         mat_X = []
         vect_Y = []
-        classes_double = ['crab','euphonium']
         print(" -- Lecture des données -- ")
         for i in range(len(vectors)):
             current_vector = vectors[i]

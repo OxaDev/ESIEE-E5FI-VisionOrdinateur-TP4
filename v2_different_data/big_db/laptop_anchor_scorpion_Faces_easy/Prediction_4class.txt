@@ -1,0 +1,16 @@
+-- Succès -- Nom fichier : 101_ObjectCategories\laptop\test\image_0011.jpg -- Prédiction : laptop
+-- Succès -- Nom fichier : 101_ObjectCategories\laptop\test\image_0012.jpg -- Prédiction : laptop
+-- Succès -- Nom fichier : 101_ObjectCategories\laptop\test\image_0013.jpg -- Prédiction : laptop
+-- Succès -- Nom fichier : 101_ObjectCategories\laptop\test\image_0014.jpg -- Prédiction : laptop
+-- Echec -- Nom fichier : 101_ObjectCategories\anchor\test\image_0011.jpg -- Prédiction : laptop
+-- Echec -- Nom fichier : 101_ObjectCategories\anchor\test\image_0012.jpg -- Prédiction : laptop
+-- Succès -- Nom fichier : 101_ObjectCategories\anchor\test\image_0013.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\anchor\test\image_0014.jpg -- Prédiction : laptop
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0019.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0020.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0021.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\scorpion\test\image_0022.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0004.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0029.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0045.jpg -- Prédiction : Faces_easy
+-- Echec -- Nom fichier : 101_ObjectCategories\Faces_easy\test\image_0048.jpg -- Prédiction : Faces_easy

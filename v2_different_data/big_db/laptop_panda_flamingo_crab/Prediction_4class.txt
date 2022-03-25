@@ -1,0 +1,16 @@
+-- Echec -- Nom fichier : 101_ObjectCategories\laptop\test\image_0011.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\laptop\test\image_0012.jpg -- Prédiction : laptop
+-- Echec -- Nom fichier : 101_ObjectCategories\laptop\test\image_0013.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\laptop\test\image_0014.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\panda\test\image_0019.jpg -- Prédiction : laptop
+-- Succès -- Nom fichier : 101_ObjectCategories\panda\test\image_0020.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\panda\test\image_0021.jpg -- Prédiction : crab
+-- Succès -- Nom fichier : 101_ObjectCategories\panda\test\image_0022.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\flamingo\test\image_0019.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\flamingo\test\image_0020.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\flamingo\test\image_0021.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\flamingo\test\image_0022.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\crab\test\image_0011.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\crab\test\image_0012.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\crab\test\image_0019.jpg -- Prédiction : crab
+-- Echec -- Nom fichier : 101_ObjectCategories\crab\test\image_0020.jpg -- Prédiction : crab
