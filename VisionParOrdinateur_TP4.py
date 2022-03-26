@@ -454,6 +454,5 @@ if(mode == "Appr_Et_Test_SVC_4Classes"):
         else:
             nb_error += 1
             #print("-- Echec -- Nom fichier : " + str(current_filename) + " -- Prédiction : " + str(temp_class[x_temp_predict-1]))
-        print
 
     print( "-- Résultat de la prédiction -- Nombre de succès : " + str(nb_success) + " -- Nombre d'échecs : " + str(nb_error))
