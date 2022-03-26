@@ -1,4 +1,3 @@
-from calendar import c
 import cv2
 from dml import kda
 from os import listdir, system, name
